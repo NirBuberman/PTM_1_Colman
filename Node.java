@@ -1,7 +1,9 @@
 package test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class Node {
@@ -36,11 +38,36 @@ public class Node {
     public void setMsg(Message msg) {
         this.msg = msg;
     }
+    public Message getMessage() {
+        return msg;
+    }
+    public void setMessage(Message message) {
+        this.msg = message;
+    }
 
     public void addEdge(Node node) {
         if (node != null && !edges.contains(node)) {
             edges.add(node);
         }
+    }
+    
+    public boolean hasCycles() {
+        Set<Node> visited = new HashSet<>();
+        return hasCyclesHelper(this, visited);
+    }
+    
+    private boolean hasCyclesHelper(Node node, Set<Node> visited) {
+        if (visited.contains(node)) {
+            return true;
+        }
+        visited.add(node);
+        for (Node edge : node.edges) {
+            if (hasCyclesHelper(edge, visited)) {
+                return true;
+            }
+        }
+        visited.remove(node);
+        return false;
     }
    
     @Override
